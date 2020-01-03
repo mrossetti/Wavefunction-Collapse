@@ -13,11 +13,6 @@ from random import random
 
 
 class WFC:
-    compass = {'NORTH': ( 0, -1),
-               'EAST' : ( 1,  0),
-               'SOUTH': ( 0,  1),
-               'WEST' : (-1,  0)}
-
     def __init__(self, input_matrix):
         self.rules, self.freqs = self.parse(input_matrix)
         self.states = set(self.freqs.keys())
@@ -26,10 +21,10 @@ class WFC:
     def valid_dirs(matrix, x, y):
         hm, wm = len(matrix)-1, len(matrix[0])-1  # max index available
         dirs = []
-        if y > 0: dirs.append(WFC.compass['NORTH'])
-        if x < wm: dirs.append(WFC.compass['EAST'])
-        if y < hm: dirs.append(WFC.compass['SOUTH'])
-        if x > 0: dirs.append(WFC.compass['WEST'])
+        if y > 0: dirs.append((0, -1))  # north
+        if x < wm: dirs.append((1, 0))  # east
+        if y < hm: dirs.append((0, 1))  # south
+        if x > 0: dirs.append((-1, 0))  # west
         return dirs
     
     @staticmethod
@@ -178,31 +173,35 @@ def main():
 
     # UNDERSTANDING RULES
     # The above rule is read as: f'Can {state2} stay at {dir} from {state1}'
+    compass = {'NORTH': ( 0, -1),
+               'EAST' : ( 1,  0),
+               'SOUTH': ( 0,  1),
+               'WEST' : (-1,  0)}
     # To illustrate, extracted rules from the sample above (input_matrix) are:
     # - Water can stay next to water from all four dirs
     # - Sand can stay next to sand from {'EAST', 'WEST'}
     # - Grass can stay next to grass from all four dirs
     # (Water can never stay next to Grass or vice-versa in any direction)
     # - Water can stay next to sand (only) from all dirs except {'NORTH'}
-    assert ('S', 'W', WFC.compass['EAST']) in wfc.rules
-    assert ('S', 'W', WFC.compass['SOUTH']) in wfc.rules
-    assert ('S', 'W', WFC.compass['WEST']) in wfc.rules
-    assert ('S', 'W', WFC.compass['NORTH']) not in wfc.rules
+    assert ('S', 'W', compass['EAST']) in wfc.rules
+    assert ('S', 'W', compass['SOUTH']) in wfc.rules
+    assert ('S', 'W', compass['WEST']) in wfc.rules
+    assert ('S', 'W', compass['NORTH']) not in wfc.rules
     # - Sand can, therefore, stay next to water from all dirs except {'SOUTH'}
-    assert ('W', 'S', WFC.compass['NORTH']) in wfc.rules
-    assert ('W', 'S', WFC.compass['EAST']) in wfc.rules
-    assert ('W', 'S', WFC.compass['WEST']) in wfc.rules
-    assert ('W', 'S', WFC.compass['SOUTH']) not in wfc.rules
+    assert ('W', 'S', compass['NORTH']) in wfc.rules
+    assert ('W', 'S', compass['EAST']) in wfc.rules
+    assert ('W', 'S', compass['WEST']) in wfc.rules
+    assert ('W', 'S', compass['SOUTH']) not in wfc.rules
     # - Grass can stay next to sand from all dirs except {'SOUTH'}
-    assert ('S', 'G', WFC.compass['NORTH']) in wfc.rules
-    assert ('S', 'G', WFC.compass['EAST']) in wfc.rules
-    assert ('S', 'G', WFC.compass['WEST']) in wfc.rules
-    assert ('S', 'G', WFC.compass['SOUTH']) not in wfc.rules
+    assert ('S', 'G', compass['NORTH']) in wfc.rules
+    assert ('S', 'G', compass['EAST']) in wfc.rules
+    assert ('S', 'G', compass['WEST']) in wfc.rules
+    assert ('S', 'G', compass['SOUTH']) not in wfc.rules
     # - Sand can, therefore, stay next to grass from all dirs except {'NORTH'}
-    assert ('G', 'S', WFC.compass['EAST']) in wfc.rules
-    assert ('G', 'S', WFC.compass['SOUTH']) in wfc.rules
-    assert ('G', 'S', WFC.compass['WEST']) in wfc.rules
-    assert ('G', 'S', WFC.compass['NORTH']) not in wfc.rules
+    assert ('G', 'S', compass['EAST']) in wfc.rules
+    assert ('G', 'S', compass['SOUTH']) in wfc.rules
+    assert ('G', 'S', compass['WEST']) in wfc.rules
+    assert ('G', 'S', compass['NORTH']) not in wfc.rules
 
 
 
