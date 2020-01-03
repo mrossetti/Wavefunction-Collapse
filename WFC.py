@@ -27,10 +27,25 @@ class WFC:
         hm, wm = len(matrix)-1, len(matrix[0])-1  # max index available
         dirs = []
         if y > 0: dirs.append(WFC.compass['NORTH'])
-        if x <wm: dirs.append(WFC.compass['EAST'])
-        if y <hm: dirs.append(WFC.compass['SOUTH'])
+        if x < wm: dirs.append(WFC.compass['EAST'])
+        if y < hm: dirs.append(WFC.compass['SOUTH'])
         if x > 0: dirs.append(WFC.compass['WEST'])
         return dirs
+    
+    @staticmethod
+    def parse(input_matrix):
+        h, w = len(input_matrix), len(input_matrix[0])
+        rules, count = set(), {}
+        for y in range(h):
+            for x in range(w):
+                cur_tile = input_matrix[y][x]
+                count[cur_tile] = count.setdefault(cur_tile, 0) + 1
+                for dx, dy in WFC.valid_dirs(input_matrix, x, y):
+                    adj_tile = input_matrix[y+dy][x+dx]
+                    rules.add((cur_tile, adj_tile, (dx, dy)))
+        total = h * w
+        freqs = {state: n / total for state, n in count.items()}
+        return rules, freqs
 
     def generate(self, shape, colors=None):
         states, rules, freqs = self.states, self.rules, self.freqs
@@ -136,21 +151,6 @@ class WFC:
                 sym = collapsed_matrix[y][x]
                 print(colors[sym] + sym + colorama.Style.RESET_ALL, end=' ')
             print()
-
-    @staticmethod
-    def parse(input_matrix):
-        h, w = len(input_matrix), len(input_matrix[0])
-        rules, count = set(), {}
-        for y in range(h):
-            for x in range(w):
-                cur_tile = input_matrix[y][x]
-                count[cur_tile] = count.setdefault(cur_tile, 0) + 1
-                for dx, dy in WFC.valid_dirs(input_matrix, x, y):
-                    adj_tile = input_matrix[y+dy][x+dx]
-                    rules.add((cur_tile, adj_tile, (dx, dy)))
-        total = h * w
-        freqs = {state: n / total for state, n in count.items()}
-        return rules, freqs
 
 
 
