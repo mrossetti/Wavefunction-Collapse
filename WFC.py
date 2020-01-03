@@ -48,12 +48,12 @@ class WFC:
         return rules, freqs
 
     def generate(self, shape, colors=None):
-        states, rules, freqs = self.states, self.rules, self.freqs
-        matrix = self.new_full_matrix(shape, fn_xy=lambda *_: states.copy())
+        possible_states_in_xy = lambda x, y: set(self.states)
+        matrix = self.new_full_matrix(shape, fn_xy=possible_states_in_xy)
         while not self.is_all_collapsed(matrix):
-            x, y = self.xy_min_entropy(matrix, freqs)
-            self.collapse(matrix, x, y, freqs)
-            self.propagate(matrix, x, y, rules)
+            x, y = self.xy_min_entropy(matrix, self.freqs)
+            self.collapse(matrix, x, y, self.freqs)
+            self.propagate(matrix, x, y, self.rules)
         output = self.get_all_collapsed(matrix)
         if colors is not None: self.render(output, colors)
         return output
