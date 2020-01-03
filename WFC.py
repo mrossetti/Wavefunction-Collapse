@@ -20,7 +20,7 @@ class WFC:
     @staticmethod
     def valid_dirs(matrix, x, y):
         hm, wm = len(matrix)-1, len(matrix[0])-1  # max index available
-        dirs = []
+        dirs = []  # all (dx, dy) available (in-bounds) from x, y
         if y > 0: dirs.append((0, -1))  # north
         if x < wm: dirs.append((1, 0))  # east
         if y < hm: dirs.append((0, 1))  # south
