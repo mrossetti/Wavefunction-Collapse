@@ -1,8 +1,8 @@
 '''
-Credits:
-    - wonderful post by Robert Heaton:
+Credits
+    - read this wonderful post by Robert Heaton:
     https://robertheaton.com/2018/12/17/wavefunction-collapse-algorithm/
-    - original source code here:
+    - find the original source code for the algorithm here:
     https://github.com/robert/wavefunction-collapse/blob/093d218e79f01cbb7787b898b458cc5d174ad7cb/main.py#L278
 '''
 
@@ -34,7 +34,7 @@ class WFC:
 
     def generate(self, shape, colors=None):
         states, rules, freqs = self.states, self.rules, self.freqs
-        matrix = self.get_full_matrix(shape, fn_xy=lambda x,y: states.copy())
+        matrix = self.new_full_matrix(shape, fn_xy=lambda *_: states.copy())
         while not self.is_all_collapsed(matrix):
             x, y = self.xy_min_entropy(matrix, freqs)
             self.collapse(matrix, x, y, freqs)
@@ -44,9 +44,9 @@ class WFC:
         return output
 
     @staticmethod
-    def get_full_matrix(shape, fill_val=None, fn_xy=None):
+    def new_full_matrix(shape, fill_val=None, fn_xy=None):
         if fn_xy is None:
-            fn_xy = lambda x,y: fill_val
+            fn_xy = lambda x, y: fill_val
         rows, cols = shape
         matrix = []
         for y in range(rows):
@@ -148,8 +148,8 @@ class WFC:
                 for dx, dy in WFC.valid_dirs(input_matrix, x, y):
                     adj_tile = input_matrix[y+dy][x+dx]
                     rules.add((cur_tile, adj_tile, (dx, dy)))
-        tot = h*w
-        freqs = {tile_sym: cnt/tot for tile_sym, cnt in count.items()}
+        total = h * w
+        freqs = {state: n / total for state, n in count.items()}
         return rules, freqs
 
 
