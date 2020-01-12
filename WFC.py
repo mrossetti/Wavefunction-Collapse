@@ -44,7 +44,7 @@ class WFC:
 
     def generate(self, shape, colors=None):
         possible_states_in_xy = lambda x, y: set(self.states)
-        matrix = self.new_full_matrix(shape, fn_xy=possible_states_in_xy)
+        matrix = self.fill_matrix(shape, fn_xy=possible_states_in_xy)
         while not self.is_all_collapsed(matrix):
             x, y = self.xy_min_entropy(matrix, self.freqs)
             self.collapse(matrix, x, y, self.freqs)
@@ -54,9 +54,8 @@ class WFC:
         return output
 
     @staticmethod
-    def new_full_matrix(shape, fill_val=None, fn_xy=None):
-        if fn_xy is None:
-            fn_xy = lambda x, y: fill_val
+    def fill_matrix(shape, fill_val=None, fn_xy=None):
+        fn_xy = fn_xy or lambda x, y: fill_val
         rows, cols = shape
         matrix = []
         for y in range(rows):
