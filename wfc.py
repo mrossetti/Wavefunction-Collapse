@@ -30,8 +30,8 @@ def directions_valid(matrix, x, y):
     """
     return all (dx, dy) available (in-bounds) from x, y
     """
-    row_max_idx = len(matrix)-1
-    col_max_idx = len(matrix[0])-1
+    row_max_idx = len(matrix) - 1
+    col_max_idx = len(matrix[0]) - 1
     
     directions = []
     
@@ -80,11 +80,11 @@ class WavefunctionCollapse:
         (every tile has the same entropy)
         
         WFC iteration:
-            - Collpase() tile state (noisy best first search min entropy)
+            - Collapse() tile state (noisy best first search min entropy)
             - Propagate() collapsed neighbours (using rules)
         
         The tile with minimum entropy is that tile whose #possible_states
-        (according to currently collpased neighbors and rules) is minimum.
+        (according to currently collapsed neighbors and rules) is minimum.
         
         WFC may reach a point in which a tile cannot collapse (i.e. zero
         possible states). This paradox forces WFC to completely restart
@@ -169,7 +169,7 @@ class WavefunctionCollapse:
                     if not adj_s_compatible:
                         matrix[adj_y][adj_x].remove(adj_s)
                 
-                # if incompatibility found
+                # if incompatibility found (i.e. removed some adj_s) propagate collapse
                 if len(matrix[adj_y][adj_x]) < len(adj_possible_states):
                     stack.append((adj_x, adj_y))
 
